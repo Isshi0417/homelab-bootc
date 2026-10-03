@@ -1,0 +1,102 @@
+FROM quay.io/centos-bootc/centos-bootc:stream9
+
+LABEL org.opencontainers.image.source="https://github.com/Isshi0417/homelab-oci-v2"
+LABEL description="Declarative CentOS Stream 9 Bootc Appliance for Rootless Podman Quadlets"
+
+RUN dnf install -y epel-release && \
+    dnf install -y \
+        smartmontools \
+        tuned \
+        policycoreutils-python-utils \
+        chrony \
+        lm_sensors \
+        pciutils \
+        usbutils \
+        ethtool \
+        htop \
+        vim-minimal \
+        curl \
+        wget \
+        tar \
+        cockpit \
+        cockpit-system \
+        cockpit-podman \
+        cockpit-storaged \
+        firewalld \
+        NetworkManager-wifi \
+        wpa_supplicant \
+        wireless-regdb \
+        microcode_ctl \
+        thermald && \
+    dnf clean all
+
+RUN systemctl enable \
+    cockpit.socket \
+    tuned \
+    chronyd \
+    firewalld \
+    fstrim.timer \
+    thermald \
+    bootc-fetch-apply-updates.timer
+
+RUN systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+
+RUN echo "throughput-performance" > /etc/tuned/active_profile
+
+COPY <<'EOF' /usr/lib/bootc/kargs.d/01-homelab.conf
+kargs = ["crashkernel=no"]
+EOF
+
+COPY <<'EOF' /etc/sysctl.d/99-homelab.conf
+net.ipv4.ip_forward = 1
+vm.swappiness = 10
+fs.inotify.max_user_watches = 524288
+fs.inotify.max_user_instances = 512
+EOF
+
+COPY <<'EOF' /etc/systemd/system.conf.d/watchdog.conf
+[Manager]
+RuntimeWatchdogSec=30s
+RebootWatchdogSec=2min
+EOF
+
+COPY <<'EOF' /etc/systemd/journald.conf.d/size_limit.conf
+[Journal]
+SystemMaxUse=2G
+RuntimeMaxUse=200M
+MaxRetentionSec=1month
+EOF
+
+COPY <<'EOF' /etc/ssh/sshd_config.d/01-hardening.conf
+PasswordAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+MaxAuthTries 3
+ClientAliveInterval 300
+ClientAliveCountMax 3
+X11Forwarding no
+EOF
+RUN chmod 600 /etc/ssh/sshd_config.d/01-hardening.conf
+
+COPY <<'EOF' /usr/lib/tmpfiles.d/homelab-storage.conf
+d /var/homelab/ 0750 homelab homelab -
+d /var/homelab/storage 0755 homelab homelab -
+EOF
+RUN ln -s /var/homelab/storage /data
+
+RUN useradd -u 1001 -U -m -s /sbin/nologin homelab && \
+    mkdir -p /var/lib/systemd/linger && \
+    touch /var/lib/systemd/linger/homelab
+
+ARG ADMIN_USER=sho
+ARG SSH_PUB_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICV5hcQhwvAH84t8Nuu7hhOqh7xdmwZKUyXrlluuOCfH sho@rakuos"
+
+RUN useradd -m -s /bin/bash -G wheel "${ADMIN_USER}" && \
+    passwd -l "${ADMIN_USER}" && \
+    mkdir -p /home/"${ADMIN_USER}"/.ssh && \
+    echo "${SSH_PUB_KEY}" > /home/"${ADMIN_USER}"/.ssh/authorized_keys && \
+    chmod 700 /home/"${ADMIN_USER}"/.ssh && \
+    chmod 600 /home/"${ADMIN_USER}"/.ssh/authorized_keys && \
+    chown -R "${ADMIN_USER}":"${ADMIN_USER}" /home/"${ADMIN_USER}" && \
+    echo "${ADMIN_USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/"${ADMIN_USER}" && \
+    chmod 440 /etc/sudoers.d/"${ADMIN_USER}"
