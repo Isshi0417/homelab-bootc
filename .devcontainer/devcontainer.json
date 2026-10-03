@@ -1,0 +1,39 @@
+{
+    "name": "Homelab Declarative OCI v2",
+    "build": {
+        "dockerfile": "Containerfile",
+        "context": ".."
+    },
+    "remoteUser": "vscode",
+    "runArgs": [
+        "--userns=keep-id",
+        "--security-opt",
+        "label=disable"
+    ],
+    "mounts":[
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,ro"
+    ],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "nu",
+                "terminal.integrated.profiles.linux": {
+                    "nu": {
+                        "path": "/usr/bin/nu"
+                    }
+                },
+                "ansible.ansible.path": "/home/vscode/.local/bin/ansible",
+                "ansible.ansibleLint.path": "/home/vscode.local/bin/ansible-lint",
+                "ansible.ansibleNavigator.path": "/home/vscode/.local/bin/ansible-navigator"
+            },
+            "extensions": [
+                "redhat.ansible",
+                "redhat.vscode-yaml",
+                "skellock.just",
+                "eamodio.gitlens",
+                "thenuprojectcontributors.vscode-nushell-lang"
+            ]
+        }
+    }
+
+}

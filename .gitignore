@@ -1,0 +1,29 @@
+# Secrets and sensitive files
+*.key
+*.pem
+*.pfx
+*.vault_pass
+.vault_pass*
+*.age
+!*.example.*
+
+# Ansible artifacts and temporary files
+*.retry
+.ansible-lint
+ansible-navigator.log
+.ansible/
+__pycache__/
+*.py[cod]
+
+# DevContainer and local editor artifacts
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*~
+
+# Operating system files
+.DS_Store
+Thumbs.db
+*.tmp
