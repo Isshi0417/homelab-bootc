@@ -1,7 +1,7 @@
 FROM registry.fedoraproject.org/fedora:41
 
 ENV container=podman \
-    LANG=en_US.UTF-8
+    LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 RUN dnf update -y && \
     dnf install -y \
@@ -20,6 +20,7 @@ RUN dnf update -y && \
         just \
         findutils \
         bash-completion \
+        glibc-langpack-en \
         nu && \
     dnf clean all
 
