@@ -1,0 +1,34 @@
+# Core System User & Runtime
+homelab_user: "homelab"
+homelab_uid: 1001
+homelab_gid: 1001
+homelab_base_dir: "/var/homelab"
+
+# Network & Ingress
+homelab_network_name: "homelab-net"
+homelab_network_subnet: "10.89.0.0/24"
+homelab_domain: "shooey.xyz"
+
+# Services Port & Subdomain Mappings
+cloudflare_tunnel_name: "homelab-edge"
+
+portfolio_container_image: "docker.io/library/nginx:alpine"
+portfolio_container_port: 8080
+portfolio_subdomain: "{{ homelab_domain }}"
+
+navidrome_container_image: "docker.io/deluan/navidrome:latest"
+navidrome_container_port: 4533
+navidrome_subdomain: "music.{{ homelab_domain }}"
+navidrome_music_dir: "{{ homelab_base_dir }}/navidrome/music"
+navidrome_data_dir: "{{ homelab_base_dir }}/navidrome/data"
+
+gitea_container_image: "docker.io/gitea/gitea:latest-rootless"
+gitea_container_http_port: 3000
+gitea_container_ssh_port: 2222
+gitea_subdomain: "git.{{ homelab_domain }}"
+gitea_data_dir: "{{ homelab_base_dir }}/gitea/data"
+
+uptime_kuma_container_image: "docker.io/louislam/uptime-kuma:1"
+uptime_kuma_container_port: 3001
+uptime_subdomain: "status.{{ homelab_domain }}"
+uptime_kuma_data_dir: "{{ homelab_base_dir }}/uptime-kuma/data"

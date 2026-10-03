@@ -21,8 +21,12 @@ repos:
     hooks:
       - id: gitleaks
 
-  - repo: https://github.com/ansible/ansible-lint
-    rev: v24.10.0
+  - repo: local
     hooks:
       - id: ansible-lint
+        name: Ansible Lint
+        entry: ansible-lint
+        language: system
         files: ^ansible/.*
+        pass_filenames: false
+        always_run: false

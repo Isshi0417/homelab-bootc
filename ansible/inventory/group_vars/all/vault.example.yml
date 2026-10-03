@@ -1,0 +1,16 @@
+# Cloudflare Zero-Trust Tunnel Token
+# Obtain from Cloudflare Zero Trust Dashboard -> Networks -> Tunnels
+vault_cloudflare_tunnel_token: "token"
+
+# Gitea Administrator Credentials & Security Secrets
+vault_gitea_admin_user: "giteaadmin"
+vault_gitea_admin_password: "ChangeMe"
+vault_gitea_admin_email: "admin@shooey.xyz"
+vault_gitea_secret_key: "ChangeMe"
+
+# Navidrome Service Credentials
+vault_navidrome_admin_user: "sho"
+vault_navidrome_admin_password: "ChangeMe"
+
+# Host unprivileged Service Account Password Hash (mkpasswd -m sha-512)
+vault_homelab_user_password_hash: "Hash"
