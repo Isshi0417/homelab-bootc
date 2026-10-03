@@ -1,0 +1,23 @@
+---
+ansible-navigator:
+  ansible:
+    config:
+      path: ./ansible.cfg
+    inventory:
+      entries:
+        - ./inventory/hosts.yml
+    playbook:
+      path: ./playbooks/site.yml
+
+  execution-environment:
+    container-engine: podman
+    enabled: false
+
+  logging:
+    level: warning
+    file: /tmp/ansible-navigator.log
+
+  mode: stdout
+
+  playbook-artifact:
+    enable: false
