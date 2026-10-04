@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkous@v4
+        uses: actions/checkout@v4
 
       - name: Log in to Github Container Registry (GHCR)
         uses: docker/login-action@v3
