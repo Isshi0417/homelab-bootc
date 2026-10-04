@@ -14,3 +14,8 @@ vault_navidrome_admin_password: "ChangeMe"
 
 # Host unprivileged Service Account Password Hash (mkpasswd -m sha-512)
 vault_homelab_user_password_hash: "Hash"
+
+# Google Drive Rcone OAuth Credentials
+vault_rclone_client_id: "client-id"
+vault_rclone_client_secret: "client-secret"
+vault_rclone_token: "token"

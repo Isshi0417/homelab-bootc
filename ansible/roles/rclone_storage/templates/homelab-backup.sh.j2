@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+BACKUP_DATE=$(date +%Y%m%d+%H%M%S)
+BACKUP_DIR="/var/homelab/backups"
+ARCHIVE_NAME="homelab-backup-${BACKUP_DATE}.tar.gz"
+TARGET_ARCHIVE="${BACKUP_DIR}/${ARCHIVE_NAME}"
+
+mkdir -p "${BACKUP_DIR}"
+
+echo "==> Creating backup archive: ${TARGET_ARCHIVE}..."
+tar --exclude="${BACKUP_DIR}" \
+    --exclude="{{ navidrome_music_dir }}" \
+    -czf "${TARGET_ARCHIVE}" \
+    "{{ homelab_base_dir }}"
+
+echo  "==> Uploading backup archive to Google Drive ({{ rclone_remote_name }}:{{ rclone_backup_remote_path }})..."
+/usr/bin/rclone copy "${TARGET_ARCHIVE}" "{{ rclone_remote_name }}:{{ rclone_backup_remote_path }}" \
+    --config="{{ rclone_config_path }}"
+
+echo "==> Pruning local backups older than 7 days..."
+find "${BACKUP_DIR}" -name "homelab-backup-*.tar.gz" -mtime +7 -delete
+
+echo "==> Pruning google Drive remote backups older than 30 days..."
+/usr/bin/rclone delete "{{ rclone_remote_name }}:{{ rclone_backup_remote_path }}" \
+    --config="{{ rclone_config_path }}" \
+    --min-age 30d
+
+echo "✓ Homelab backup successfully completed."

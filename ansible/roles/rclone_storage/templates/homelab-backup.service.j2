@@ -1,0 +1,10 @@
+[Unit]
+Description=Automated Homelab Backup to Google Drive
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/homelab-backup.sh
+StandardOutput=journal
+StandardError=journal

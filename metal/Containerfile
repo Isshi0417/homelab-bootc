@@ -23,6 +23,7 @@ RUN dnf install -y epel-release && \
         cockpit-podman \
         cockpit-storaged \
         firewalld \
+        fuse3 \
         NetworkManager-wifi \
         wpa_supplicant \
         wireless-regdb \

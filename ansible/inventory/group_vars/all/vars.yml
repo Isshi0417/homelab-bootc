@@ -32,3 +32,9 @@ uptime_kuma_container_image: "docker.io/louislam/uptime-kuma:1"
 uptime_kuma_container_port: 3001
 uptime_subdomain: "status.{{ homelab_domain }}"
 uptime_kuma_data_dir: "{{ homelab_base_dir }}/uptime-kuma/data"
+
+rclone_remote_name: "gdrive"
+rclone_music_remote_path: "music"
+rclone_backup_remote_path: "homelab-backups"
+rclone_cache_dir: "/var/cache/rclone"
+rclone_config_path: "/etc/rclone/rclone.conf"

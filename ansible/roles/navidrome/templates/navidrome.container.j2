@@ -1,6 +1,7 @@
 [Unit]
 Description=Navidrome Music Streaming Service
-After=network-online.target homelab-network.service
+After=network-online.target homelab-network.service rclone-gdrive.service
+Wants=rclone-gdrive.service
 Requires=homelab-network.service
 
 [Container]
@@ -12,7 +13,7 @@ Environment=ND_SCANSCHEDULE=1h
 Environment=ND_LOGLEVEL=info
 Environment=ND_BASEURL=""
 Volume={{ navidrome_music_dir }}:/music:ro,Z
-Volume={{ navidrome_data_dir }}:/data,rw,Z
+Volume={{ navidrome_data_dir }}:/data:rw,Z
 
 [Service]
 Restart=always

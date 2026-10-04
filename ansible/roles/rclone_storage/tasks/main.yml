@@ -1,0 +1,73 @@
+---
+- name: Ensure FUSE configuration permits non-root mounts (user_allow_other)
+  ansible.builtin.lineinfile:
+    path: /etc/fuse.conf
+    regexp: '^#?\s*user_allow_other'
+    line: "user_allow_other"
+    state: present
+  become: true
+
+- name: Create rclone configuration directory
+  ansible.builtin.file:
+    path: /etc/rclone
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  become: true
+
+- name: Deploy secure rclone configuration (0600)
+  ansible.builtin.template:
+    src: rclone.conf.j2
+    dest: "{{ rclone_config_path }}"
+    owner: root
+    group: root
+    mode: "0600"
+  become: true
+  notify: Restart rclone mount
+
+- name: Deploy rclone Google Drive systemd mount service
+  ansible.builtin.template:
+    src: rclone-gdrive.service.j2
+    dest: /etc/systemd/system/rclone-gdrive.service
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Reload systemd
+
+- name: Deploy automated Google Drive backup script
+  ansible.builtin.template:
+    src: homelab-backup.sh.j2
+    dest: /usr/local/bin/homelab-backup.sh
+    owner: root
+    group: root
+    mode: "0750"
+  become: true
+
+- name: Deploy homelab backup systemd service unit
+  ansible.builtin.template:
+    src: homelab-backup.service.j2
+    dest: /etc/systemd/system/homelab-backup.service
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Reload systemd
+
+- name: Deply homelab backup systemd timer unit
+  ansible.builtin.template:
+    src: homelab-backup.timer.j2
+    dest: /etc/systemd/system/homelab-backup.timer
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Reload systemd
+
+- name: Ensure Google Drive backup timer is active and enabled
+  ansible.builtin.systemd_service:
+    name: homelab-backup.timer
+    enabled: true
+    state: started
+  become: true
