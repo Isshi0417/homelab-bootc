@@ -41,14 +41,14 @@ vault-edit FILE:
 # Verify syntax of all Ansible roles and playbooks
 ansible-check:
     @echo "==> Performing Ansible playbook syntax check..."
-    cd ansible && ansible-playbook -i inventory/hosts.yml playbooks/site.yml --syntax-check
+    ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/site.yml --syntax-check
 
 # Execute playbook convergence via ansible-playbook stdout
 ansible-apply:
     @echo "==> Executing platform convergence..."
-    cd ansible && ansible-playbook -i inventory/hosts.yml playbooks/site.yml
+    ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/site.yml
 
 # Launch interactive Red Hat Ansible Navigator TUI dashboard
 ansible-tui:
     @echo "==> Launching Ansible Navigator TUI..."
-    cd ansible && ansible-navigator run playbooks/site.yml
+    ansible-navigator run ansible/playbooks/site.yml

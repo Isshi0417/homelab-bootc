@@ -1,0 +1,28 @@
+---
+- name: Deploy starter index.html for portfolio
+  ansible.builtin.copy:
+    content: |
+      <!DOCTYPE html>
+      <html lane="en">
+      <head><title>Sho Ishida | RHCE Homelab Platform</title></head>
+      <body style="font-family: monospace; padding: 2rem; background: #121212; color: #00ff66;">
+        <h1>Sho Ishida - Systems Engineer</h1>
+        <p>Declarative Immutable Homelab powered by CentOS Stream 9 Bootc & Podman Quadlets.</p>
+        <p>SELinux Enforcing | Principle of Least Privilege | Cloudflare Zero-Trust Ingress</p>
+      </body>
+      </html>
+    dest: "{{ homelab_base_dir }}/portfolio/html/index.html"
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0644"
+  become: true
+
+- name: Deploy Portfolio Web Quadlet
+  ansible.builtin.template:
+    src: portfolio.container.j2
+    dest: "/home/{{ homelab_user }}/.config/containers/systemd/portfolio.container"
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0644"
+  become: true
+  notify: Reload systemd user daemon

@@ -1,0 +1,20 @@
+[Unit]
+Description=Personal Portfolio Web Service
+After=network-online.target homelab-network.service
+Requires=homelab-network.service
+
+[Container]
+ContainerName=portfolio
+Image={{ portfolio_container_image }}
+Network={{ homelab_network_name }}
+AutoUpdate=registry
+Volume={{ homelab_base_dir }}/portfolio/html:/usr/share/nginx/html:ro,Z
+ReadOnly=true
+DropCapability=ALL
+NoNewPrivileges=true
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

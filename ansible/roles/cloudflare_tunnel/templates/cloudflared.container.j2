@@ -1,0 +1,20 @@
+[Unit]
+Description=Cloudflare Zero-Trust Ingress Connector
+After=network-online.target homelab-network.service
+Requires=homelab-network.service
+
+[Container]
+ContainerName=cloudflared
+Image=docker.io/cloudflare/cloudflared:latest
+Network={{ homelab_network_name }}
+AutoUpdate=registry
+Exec=tunnel --no-autoupdate run --token {{ vault_cloudflare_tunnel_token }}
+DropCapability=ALL
+NoNewPrivileges=true
+
+[Service]
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=default.target

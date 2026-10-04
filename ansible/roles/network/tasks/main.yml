@@ -1,0 +1,13 @@
+---
+- name: Deploy internal Quadlet network definition
+  ansible.builtin.template:
+    src: homelab.network.j2
+    dest: "/home/{{ homelab_user }}/.config/containers/systemd/homelab.network"
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0644"
+  become: true
+  notify: Reload systemd user daemon
+
+- name: Flush handlers to generate network unit
+  ansible.builtin.meta: flush_handlers

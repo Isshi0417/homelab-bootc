@@ -1,0 +1,50 @@
+---
+- name: Ensure unprivileged homelab service group exists
+  ansible.builtin.group:
+    name: "{{ homelab_user }}"
+    gid: "{{ homelab_gid }}"
+    state: present
+  become: true
+
+- name: Ensure unprivileged service user exists
+  ansible.builtin.user:
+    name: "{{ homelab_user }}"
+    uid: "{{ homelab_uid }}"
+    group: "{{ homelab_user }}"
+    shell: /sbin/nologin
+    create_home: true
+    state: present
+  become: true
+
+- name: Enable systemd lingering for homelab user (enables boot-time Quadlets)
+  ansible.builtin.command:
+    cmd: "loginctl enable-linger {{ homelab_user }}"
+    creates: "/var/lib/systemd/linger/{{ homelab_user }}"
+  become: true
+
+- name: Create persistent storage root directories with strict SELinux contexts
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0750"
+    setype: container_file_t
+  loop:
+    - "{{ homelab_base_dir }}"
+    - "{{ homelab_base_dir }}/storage"
+    - "{{ homelab_base_dir }}/portfolio/html"
+    - "{{ homelab_base_dir }}/navidrome/music"
+    - "{{ homelab_base_dir }}/navidrome/data"
+    - "{{ homelab_base_dir }}/gitea/data"
+    - "{{ homelab_base_dir }}/uptime-kuma/data"
+  become: true
+
+- name: Ensure rootless Quadlet configuration directory exists
+  ansible.builtin.file:
+    path: "/home/{{ homelab_user }}/.config/containers/systemd"
+    state: directory
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0700"
+  become: true
