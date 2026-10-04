@@ -10,7 +10,7 @@
     - role: rclone_storage
     - role: portfolio
     - role: navidrome
-    - role: gitea
+    - role: forgejo
     - role: uptime_kuma
 
   handlers:

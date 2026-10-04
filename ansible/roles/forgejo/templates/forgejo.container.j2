@@ -1,0 +1,25 @@
+[Unit]
+Description=Forgejo Self-Hosted Git Service (Rootless SQLite)
+After=network-online.target homelab-network.service
+Requires=homelab-network.service
+
+[Container]
+ContainerName=forgejo
+Image={{ forgejo_container_image }}
+Network={{ homelab_network_name }}
+AutoUpdate=registry
+Environment=USER_UID={{ homelab_uid }}
+Environment=USER_GID={{ homelab_gid }}
+Environment=FORGEJO__database__DB_TYPE=sqlite3
+Environment=FORGEJO__database__PATH=/data/gitea/gitea.db
+Environment=FORGEJO__server__DOMAIN={{ forgejo_subdomain }}
+Environment=FORGEJO__server__ROOT_URL=https://{{ forgejo_subdomain }}/
+Environment=FORGEJO__server__HTTP_PORT=3000
+Environment=FORGEJO__security__SECRET_KEY={{ vault_forgejo_secret_key }}
+Volume={{ forgejo_data_dir }}:/data:rw,Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

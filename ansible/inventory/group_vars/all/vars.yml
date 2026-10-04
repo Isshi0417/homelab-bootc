@@ -22,11 +22,11 @@ navidrome_subdomain: "music.{{ homelab_domain }}"
 navidrome_music_dir: "{{ homelab_base_dir }}/navidrome/music"
 navidrome_data_dir: "{{ homelab_base_dir }}/navidrome/data"
 
-gitea_container_image: "docker.io/gitea/gitea:latest-rootless"
-gitea_container_http_port: 3000
-gitea_container_ssh_port: 2222
-gitea_subdomain: "git.{{ homelab_domain }}"
-gitea_data_dir: "{{ homelab_base_dir }}/gitea/data"
+forgejo_container_image: "codeberg.org/forgejo/forgejo:9-rootless"
+forgejo_container_http_port: 3000
+forgejo_container_ssh_port: 2222
+forgejo_subdomain: "git.{{ homelab_domain }}"
+forgejo_data_dir: "{{ homelab_base_dir }}/forgejo/data"
 
 uptime_kuma_container_image: "docker.io/louislam/uptime-kuma:1"
 uptime_kuma_container_port: 3001

@@ -36,7 +36,7 @@
     - "{{ homelab_base_dir }}/portfolio/html"
     - "{{ homelab_base_dir }}/navidrome/music"
     - "{{ homelab_base_dir }}/navidrome/data"
-    - "{{ homelab_base_dir }}/gitea/data"
+    - "{{ homelab_base_dir }}/forgejo/data"
     - "{{ homelab_base_dir }}/uptime-kuma/data"
   become: true
 

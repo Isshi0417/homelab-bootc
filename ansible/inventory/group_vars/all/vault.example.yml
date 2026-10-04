@@ -3,10 +3,10 @@
 vault_cloudflare_tunnel_token: "token"
 
 # Gitea Administrator Credentials & Security Secrets
-vault_gitea_admin_user: "giteaadmin"
-vault_gitea_admin_password: "ChangeMe"
-vault_gitea_admin_email: "admin@shooey.xyz"
-vault_gitea_secret_key: "ChangeMe"
+vault_forgejo_admin_user: "forgejoadmin"
+vault_forgejo_admin_password: "ChangeMe"
+vault_forgejo_admin_email: "admin@shooey.xyz"
+vault_forgejo_secret_key: "ChangeMe"
 
 # Navidrome Service Credentials
 vault_navidrome_admin_user: "sho"

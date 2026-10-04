@@ -1,8 +1,8 @@
 ---
-- name: Deploy Gitea Git Quadlet
+- name: Deploy Forgejo Git Quadlet
   ansible.builtin.template:
-    src: gitea.container.j2
-    dest: "/home/{{ homelab_user }}/.config/containers/systemd/gitea.container"
+    src: forgejo.container.j2
+    dest: "/home/{{ homelab_user }}/.config/containers/systemd/forgejo.container"
     owner: "{{ homelab_user }}"
     group: "{{ homelab_user }}"
     mode: "0644"
