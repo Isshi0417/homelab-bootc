@@ -48,7 +48,7 @@ jobs:
           push: true
           tags: |
             ${{ env.IMAGE_TAG }}:latest
-            ${{ env.IMAGE_TAG }}:${{ github:sha }}
+            ${{ env.IMAGE_TAG }}:${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.description=Declarative CentOS Stream 9 Bootc Image for Homelab OCI v2
