@@ -1,0 +1,17 @@
+[Unit]
+Description=Uptime Kuma Health & Status Dashboard
+After=network-online.target homelab-network.service
+Requires=homelab-network.service
+
+[Container]
+ContainerName=uptime-Kuma
+Image={{ uptime_kuma_container_image }}
+Network={{ homelab_network_name }}
+AutoUpdate=registry
+Volume={{ uptime_kuma_data_dir }}:/app/data:rw,Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

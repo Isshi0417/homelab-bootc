@@ -1,0 +1,10 @@
+---
+- name: Deploy Navidrome Music Quadlet
+  ansible.builtin.template:
+    src: navidrome.container.j2
+    dest: "/home/{{ homelab_user }}/.config/containers/systemd/navidrome.container"
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0644"
+  become: true
+  notify: Reload systemd user daemon

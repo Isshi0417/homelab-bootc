@@ -1,0 +1,24 @@
+[Unit]
+Description=Gitea Self-Hosted Git Service (Rootless SQLite)
+After=network-online.target homelab-network.service
+Requires=homelab-network.service
+
+[Container]
+ContainerName=gitea
+Image={{ gitea_container_image }}
+Network={{ homelab_network_name }}
+AutoUpdate=registry
+Environment=USER_UID={{ homelab_uid }}
+Environment=USER_GID={{ homelab_gid }}
+Environment=GITEA__database__DB_TYPE=sqlite3
+Environment=GITEA__database__PATH=/data/gitea/gitea.db
+Environment=GITEA__server__DOMAIN={{ gitea_subdomain }}/
+Environment=GITEA__server__ROOT_URL=https://{{ gitea_subdomain }}/
+Environment=GITEA__security__SECRET_KEY={{ vault_gitea_secret_key }}
+Volume={{ gitea_data_dir }}:/data:rw,Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

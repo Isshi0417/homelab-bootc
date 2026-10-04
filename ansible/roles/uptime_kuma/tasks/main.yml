@@ -1,0 +1,10 @@
+---
+- name: Deploy Uptime Kuma Quadlet
+  ansible.builtin.template:
+    src: uptime-kuma.container.j2
+    dest: "/home/{{ homelab_user }}/.config/containers/systemd/uptime-kuma.container"
+    owner: "{{ homelab_user }}"
+    group: "{{ homelab_user }}"
+    mode: "0644"
+  become: true
+  notify: Reload systemd user daemon

@@ -8,6 +8,9 @@
     - role: network
     - role: cloudflare_tunnel
     - role: portfolio
+    - role: navidrome
+    - role: gitea
+    - role: uptime_kuma
 
   handlers:
     - name: Reload systemd user daemon
