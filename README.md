@@ -18,11 +18,7 @@
 
 A declarative, production-grade private cloud platform engineered on bare-metal immutable **CentOS Stream 9 Bootc**. Built under the **KISS (Keep It Simple, Stupid)** philosophy, eliminating nested hypervisor overhead by running workloads as native, rootless **Podman Quadlets** under strict **SELinux Enforcing** mode. Orchestrated entirely via **Ansible Navigator** following Red Hat Enterprise (RHCSA / RHCE) standards.
 
-
-
 ---
-
-
 
 ## System Architecture
 
@@ -98,11 +94,7 @@ flowchart TB
     BackupScript -->|rclone copy & 30d prune| GDrive
 ```
 
-
-
 ---
-
-
 
 ## Core Engineering Competencies Demonstrated
 
@@ -118,8 +110,6 @@ flowchart TB
 
 * FUSE3 Integration: Enables `user_allow_other` in `/etc/fuse.conf` and mounts cloud file systems with VFS caching.
 
-
-
 ### Modern Configuration Management & RHCE Standards
 
 * Principle of Least Privilege: Global `become = False` in `ansible.cfg`. Privilege escalation (`sudo`) is scoped strictly to tasks requiring administrative privileges.
@@ -130,8 +120,6 @@ flowchart TB
 
 * SSH Optimization: Pipelining and `ControlMaster` socket multiplexing enabled for ultra-fast task execution.
 
-
-
 ### Daemonless Containerization (Podman Quadlet)
 
 * Native Systemd Integration: Eliminates Docker Compose in favor of native systemd Quadlet generators (`.container`, `.network`) in `~homelab/config/containers/systemd/`.
@@ -140,19 +128,13 @@ flowchart TB
 
 * Automated Registry Updates: Quadlets specificy `AutoUpdate=registry` for automated container image patching via `podman-auto-update.timer`.
 
-
-
 ### Zero-Trust Ingress & Git Hygiene
 
 * Zero Exposed Inbound Ports: Public traffic reaches workloads exclusively through encrypted Cloudflare Zero-Trust Tunnels, bypassing CGNAT and eliminating firewall attack surfaces.
 
 * Pre-Commit Filter Pipeline: Enforces trailing-whitespace stripping, POSIX EOF normalization, YAML validation, Gitleaks secret leak detection, and native `ansible-lint` compliance before any commit is accepted.
 
-
-
 ---
-
-
 
 ## Operational Runbook
 
@@ -167,8 +149,6 @@ just --list
 # Install git pre-commit hooks
 just init
 ```
-
-
 
 ### Secret Configuration (Ansible Vault)
 
@@ -188,8 +168,6 @@ cp ansible/inventory/group_vars/all/vault.example.yml \
 just vault-encrypt ansible/inventory/group_vars/all/vault.yml
 ```
 
-
-
 ### Syntax Verification & Quality Check
 
 Run the automated test suite:
@@ -202,10 +180,6 @@ just ansible-check
 just lint
 ```
 
-
-
-
-
 ### Platform Convergence (Ansible Navigator)
 
 ```bash
@@ -216,11 +190,7 @@ just ansible-apply
 just ansible-tui
 ```
 
-
-
 ---
-
-
 
 ## Service Endpoints
 
